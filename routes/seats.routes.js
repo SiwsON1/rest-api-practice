@@ -19,17 +19,25 @@ router.route('/seats/:id').get((req, res) => {
   });
 // post new seat
 router.route('/seats').post((req, res) => {
-    const { day, seat, client, email } = req.body;
-  
-    if ( day && seat && client && email) {
-      const newSeat = { id: db.seats.length + 1, day, seat, client, email };
-      db.concerts.push(newSeat);
-  
-      res.status(200).json({ message: 'OK' });
+  const { day, seat, client, email } = req.body;
+
+  if (day && seat && client && email) {
+    const isSeatTaken = db.seats.some((existingSeat) => {
+      return existingSeat.day === day && existingSeat.seat === seat;
+    });
+
+    if (isSeatTaken) {
+      res.status(400).json({ messege: 'The slot is already taken...' });
     } else {
-      res.status(400).json({ error: 'Missing data' });
+      const newSeat = { id: db.seats.length + 1, day, seat, client, email };
+      db.seats.push(newSeat);
+
+      res.status(200).json({ message: 'OK' });
     }
-  });
+  } else {
+    res.status(400).json({ messege: 'Missing data' });
+  }
+});
  // modify seat by id
  router.route('/seats/:id').put((req, res) => {
     const id = parseInt(req.params.id);
