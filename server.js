@@ -35,7 +35,10 @@ app.get('*', (req, res) => {
     res.status(404).send('404 not found...');
   });
 
-  mongoose.connect('mongodb://localhost:27017/NewWaveDB', { useNewUrlParser: true });
+  mongoose.connect('mongodb+srv://masik09:BUo0jIUknYbMvkgG@cluster0.lfy7bmc.mongodb.net/NewWaveDB?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 const db = mongoose.connection;
 
 db.once('open', () => {
