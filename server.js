@@ -35,11 +35,16 @@ app.get('*', (req, res) => {
     res.status(404).send('404 not found...');
   });
 
-  mongoose.connect('mongodb+srv://masik09:BUo0jIUknYbMvkgG@cluster0.lfy7bmc.mongodb.net/NewWaveDB?retryWrites=true&w=majority', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+const NODE_ENV = process.env.NODE_ENV;
+let dbUri = '';
+
+if(NODE_ENV === 'production') dbUri = 'mongodb+srv://masik09:BUo0jIUknYbMvkgG@cluster0.lfy7bmc.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+else if(NODE_ENV === 'test') dbUri = 'mongodb://localhost:27017/NewWaveDBtest';
+else dbUri = 'mongodb+srv://masik09:BUo0jIUknYbMvkgG@cluster0.lfy7bmc.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+
+mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
+
 
 db.once('open', () => {
   console.log('Connected to the database');
@@ -55,3 +60,5 @@ const io = socket(server);
 io.on('connection', (socket) => {
   console.log('New client! Its id' + socket.id);
 });
+
+module.exports = server;

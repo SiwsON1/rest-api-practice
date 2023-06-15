@@ -85,3 +85,58 @@ exports.getAll = async (req, res) => {
   };
 
   
+  exports.getByPerformer = async (req, res) => {
+
+    try {
+      const performer = req.params.performer;
+      const concerts = await Concert.find({ performer });
+
+      res.status(200).json(concerts);
+    } catch (error) {
+      res.status(500).json({ message: 'Not found...' });
+    }
+  
+  };
+
+  exports.getByGenre = async (req, res) => {
+
+    try {
+      const genre = req.params.genre;
+      const concerts = await Concert.find({ genre });
+
+      res.status(200).json(concerts);
+    } catch (error) {
+      res.status(500).json({ message: 'Not found...' });
+    }
+  
+  };
+
+  exports.getByPrice = async (req, res) => {
+
+    try {
+      const priceMin = parseFloat(req.params.price_min);
+      const priceMax = parseFloat(req.params.price_max);
+
+      const concerts = await Concert.find({ price: { $gte: priceMin, $lte: priceMax } });
+
+      res.status(200).json(concerts);
+    } catch (error) {
+      res.status(500).json({ message: 'Not found...' });
+    }
+  };
+  exports.getByDay = async (req, res) => {
+
+    try {
+      const day = parseInt(req.params.day);
+
+      // Wyszukaj koncerty na podstawie dnia
+      const concerts = await Concert.find({ day });
+
+      res.status(200).json(concerts);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+
+  };
+
+ 

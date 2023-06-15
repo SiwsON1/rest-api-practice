@@ -6,14 +6,18 @@
   "author": "Marcin Siwonia <mahinek12@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "chai": "4.2.0",
+    "chai-http": "4.3.0",
     "cors": "^2.8.5",
     "express": "4.17.1",
+    "mocha": "6.2.1",
     "mongodb": "3.3.2",
     "mongoose": "5.7.1",
     "socket.io": "^4.6.2"
   },
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "set NODE_ENV=test&& mocha \"./{,!(node_modules|client)/**/}*.test.js\""
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
