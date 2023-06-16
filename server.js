@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 const socket = require('socket.io');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 
 // import routes
@@ -22,6 +23,8 @@ app.use((req, res, next) => {
 });
 
 app.use(cors());
+app.use(helmet());
+
 
 app.use('/api', concertsRoutes);
 app.use('/api', seatsRoutes);
@@ -38,9 +41,9 @@ app.get('*', (req, res) => {
 const NODE_ENV = process.env.NODE_ENV;
 let dbUri = '';
 
-if(NODE_ENV === 'production') dbUri = 'mongodb+srv://masik09:BUo0jIUknYbMvkgG@cluster0.lfy7bmc.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+if(NODE_ENV === 'production') dbUri = 'mongodb+srv://masik09:${process.env.DB_PASS}@cluster0.lfy7bmc.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
 else if(NODE_ENV === 'test') dbUri = 'mongodb://localhost:27017/NewWaveDBtest';
-else dbUri = 'mongodb+srv://masik09:BUo0jIUknYbMvkgG@cluster0.lfy7bmc.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+else dbUri = 'mongodb+srv://masik09:${process.env.DB_PASS}@cluster0.lfy7bmc.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
 
 mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
